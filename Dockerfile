@@ -1,6 +1,6 @@
 FROM php:8.2-fpm
 
-# Install system dependencies & PHP extensions (GD & MongoDB)
+# Install system dependencies & PHP extensions
 RUN apt-get update && apt-get install -y \
     git \
     curl \
@@ -13,7 +13,7 @@ RUN apt-get update && apt-get install -y \
     pkg-config \
     && pecl install mongodb \
     && docker-php-ext-enable mongodb \
-    && docker-php-ext-install pdo_ bloodshed gd mbstring exif pcntl bcmath opcache
+    && docker-php-ext-install gd mbstring exif pcntl bcmath opcache
 
 # Get latest Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
