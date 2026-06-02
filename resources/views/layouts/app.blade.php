@@ -7,15 +7,13 @@
 <meta name="walkin-store-url" content="{{ route('walkin.store') }}">
 <title>PlayZone – Sistem Kasir</title>
 
-<!-- Fonts & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 
-<!-- SOLUSI PAMUNGKAS: Langsung Tembak Tailwind v4 dari Pusat -->
-<script src="https://cdn.jsdelivr.net/preset/tailwindcss@4.0.0"></script>
+<script src="https://cdn.tailwindcss.com"></script>
 
 </head>
-<body>
+<body class="bg-[#FDFBF9]">
 
 {{-- Mobile sidebar overlay --}}
 <div class="sb-overlay" id="sb-overlay" onclick="closeSidebar()"></div>
@@ -25,12 +23,11 @@
 <div class="main">
     @include('components.navbar')
 
-    <div class="content">
+    <div class="content p-6">
         @yield('content')
     </div>
 </div>
 
-<!-- Toast container -->
 <div id="toast-wrap"></div>
 
 @include('components.modals')
