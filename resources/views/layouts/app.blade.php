@@ -6,9 +6,14 @@
 <meta name="csrf-token" content="{{ csrf_token() }}">
 <meta name="walkin-store-url" content="{{ route('walkin.store') }}">
 <title>PlayZone – Sistem Kasir</title>
+
+<!-- Fonts & Icons -->
 <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-{{-- Baris funpark.css sudah dihapus dari sini --}}
+
+<!-- SOLUSI PAMUNGKAS: Langsung Tembak Tailwind v4 dari Pusat -->
+<script src="https://cdn.jsdelivr.net/preset/tailwindcss@4.0.0"></script>
+
 </head>
 <body>
 
@@ -31,6 +36,5 @@
 @include('components.modals')
 
 @stack('scripts')
-{{-- Baris funpark.js sudah dihapus dari sini --}}
 </body>
 </html>
