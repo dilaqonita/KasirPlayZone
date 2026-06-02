@@ -20,7 +20,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        if (config('app.env') === 'production') {
+        // Kunci utama: Paksa semua URL & Route di semua Blade jadi HTTPS jika di Railway
+        if (config('app.env') === 'production' || env('TRUST_PROXIES')) {
             URL::forceScheme('https');
         }
     }
