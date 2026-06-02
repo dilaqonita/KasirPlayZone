@@ -476,7 +476,7 @@ body, .content, main {
 <script>
 var CSRF_TOKEN = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
 var CHECKOUT_URL = '/scanner/checkout';
-var LIVE_URL = "{{ route('dashboard.live-visitors') }}";
+var LIVE_URL = '/dashboard/live-visitors'; // <-- Bagian ini diganti jadi teks biasa ini ya!
 window.currentSlotId = "{{ $slotId }}";
 
 // Update Durasi

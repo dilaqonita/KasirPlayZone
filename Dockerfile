@@ -29,4 +29,4 @@ RUN composer install --no-interaction --optimize-autoloader --ignore-platform-re
 
 # Expose port and start php server
 EXPOSE 8080
-CMD php artisan serve --host=0.0.0.0 --port=8080
+CMD php artisan config:clear && php artisan view:clear && php artisan route:clear && php artisan serve --host=0.0.0.0 --port=8080
