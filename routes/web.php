@@ -17,17 +17,20 @@ use App\Http\Controllers\TransactionController;
 */
 
 Route::get('/login', function () {
+    /*
+    | Kalau sudah login, jangan balik ke halaman login.
+    | Langsung arahkan ke dashboard.
+    */
+    if (session()->has('api_token')) {
+        return redirect()->route('dashboard');
+    }
 
     return view('auth.login');
-
 })->name('login');
 
+Route::post('/login-api', [AuthController::class, 'login'])->name('login.api');
 
-Route::post('/login-api',
-    [AuthController::class,'login']);
-
-Route::post('/logout',
-    [AuthController::class,'logout']);
+Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
 
 
 /*
@@ -37,94 +40,105 @@ Route::post('/logout',
 */
 
 Route::get('/', function () {
-
-    return redirect('/dashboard');
-
+    return redirect()->route('dashboard');
 });
 
 
 /*
 |--------------------------------------------------------------------------
-| MAIN ROUTES (TANPA AUTH)
+| DASHBOARD
 |--------------------------------------------------------------------------
 */
 
-Route::get('/dashboard',
-    [DashboardController::class, 'index']
-)->name('dashboard');
+Route::get('/dashboard', [DashboardController::class, 'index'])
+    ->name('dashboard');
+
+Route::get('/dashboard/live-visitors', [DashboardController::class, 'liveVisitors'])
+    ->name('dashboard.live-visitors');
+
+Route::get('/dashboard/live-stats', [DashboardController::class, 'liveStats'])
+    ->name('dashboard.live-stats');
+
+Route::post('/dashboard/capacity', [DashboardController::class, 'updateCapacity'])
+    ->name('dashboard.capacity');
 
 
-Route::get('/dashboard/live-visitors',
-    [DashboardController::class, 'liveVisitors']
-)->name('dashboard.live-visitors');
+/*
+|--------------------------------------------------------------------------
+| WALK-IN
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/walk-in', [WalkinController::class, 'index'])
+    ->name('walkin.index');
+
+Route::post('/walk-in', [WalkinController::class, 'store'])
+    ->name('walkin.store');
 
 
-Route::get('/dashboard/live-stats',
-    [DashboardController::class, 'liveStats']
-)->name('dashboard.live-stats');
+/*
+|--------------------------------------------------------------------------
+| SCANNER
+|--------------------------------------------------------------------------
+*/
 
-Route::post('/dashboard/capacity',
-    [DashboardController::class, 'updateCapacity']
-)->name('dashboard.capacity');
+Route::get('/scanner', [ScannerController::class, 'index'])
+    ->name('scanner.index');
 
+Route::post('/scanner/checkin', [ScannerController::class, 'checkin'])
+    ->name('scanner.checkin');
 
-Route::get('/walk-in',
-    [WalkinController::class, 'index']
-)->name('walkin.index');
+Route::post('/scanner/validate', [ScannerController::class, 'validate'])
+    ->name('scanner.validate');
 
-
-Route::post('/walk-in',
-    [WalkinController::class, 'store']
-)->name('walkin.store');
-
-
-Route::post(
-'/scanner/checkin',
-[ScannerController::class,'checkin']
-)->name('scanner.checkin');
+Route::post('/scanner/checkout', [ScannerController::class, 'checkout'])
+    ->name('scanner.checkout');
 
 
-Route::get('/scanner',
-    [ScannerController::class, 'index']
-)->name('scanner.index');
+/*
+|--------------------------------------------------------------------------
+| NOTIFICATIONS
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/notifications', [NotificationController::class, 'index'])
+    ->name('notifications.index');
+
+Route::post('/notifications/read/{id}', [NotificationController::class, 'markRead'])
+    ->name('notifications.read');
+
+Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead'])
+    ->name('notifications.read-all');
 
 
-Route::post('/scanner/validate',
-    [ScannerController::class, 'validate']
-)->name('scanner.validate');
+/*
+|--------------------------------------------------------------------------
+| TRANSACTION
+|--------------------------------------------------------------------------
+*/
+
+Route::get('/transaction', [TransactionController::class, 'index'])
+    ->name('transaction');
+
+Route::get('/transaction/{id}', [TransactionController::class, 'show'])
+    ->name('transaction.show');
+
+Route::put('/transaction/refund/{id}', [TransactionController::class, 'refund'])
+    ->name('transaction.refund');
 
 
-Route::post('/scanner/checkout',
-    [ScannerController::class, 'checkout']
-)->name('scanner.checkout');
-
-Route::get('/notifications', [NotificationController::class, 'index']);
-Route::post('/notifications/read/{id}', [NotificationController::class, 'markRead']);
-Route::post('/notifications/read-all', [NotificationController::class, 'markAllRead']);
-
-Route::get('/transaction',
-    [TransactionController::class, 'index']
-)->name('transaction');
-
-
-Route::get('/transaction/{id}',
-    [TransactionController::class, 'show']
-)->name('transaction.show');
-
-
-Route::put('/transaction/refund/{id}',
-    [TransactionController::class, 'refund']
-)->name('transaction.refund');
+/*
+|--------------------------------------------------------------------------
+| QR TICKET
+|--------------------------------------------------------------------------
+*/
 
 Route::get('/tiket/qr/{code}', function ($code) {
-
-    $qr =
-        QrCode::format('svg')
+    $qr = QrCode::format('svg')
         ->size(200)
         ->margin(1)
         ->generate($code);
 
     return response($qr)
         ->header('Content-Type', 'image/svg+xml');
-
 })->name('tiket.qr');
